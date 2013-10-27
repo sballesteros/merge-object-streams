@@ -1,18 +1,17 @@
 merge-ldjson-streams
 ====================
 
-Merge line delimited JSON readable streams (for instance coming from
-CSV data) operating in object mode.
+Merge line by line streams operating in object mode.
 
 
-[![NPM](https://nodei.co/npm/merge-ldjson-streams.png)](https://nodei.co/npm/merge-ldjson-streams/)
+[![NPM](https://nodei.co/npm/merge-object-streams.png)](https://nodei.co/npm/merge-object-streams/)
 
 Usage
 =====
 
-    var Mls = require('merge-ldjson-streams');
+    var Mos = require('merge-object-streams');
 
-    var mergedStream = new Mls([ldjsonStream1, ldjsonStream2], options);
+    var mergedStream = new Mos([ldjsonStream1, ldjsonStream2], options);
     mergedStream.on('data', function(mergedRow){
       console.log(mergedRow);
     });
