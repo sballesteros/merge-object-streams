@@ -1,4 +1,4 @@
-var Mls = require('..')
+var Mos = require('..')
   , Readable = require('stream').Readable
   , assert = require('assert');
 
@@ -66,7 +66,7 @@ describe('merge', function(){
     assert.equal(data1.length, data2.length);
     var cnt = 0;
 
-    var m = new Mls(makeStreams([data1, data2]));
+    var m = new Mos(makeStreams([data1, data2]));
 
     m.on('data', function(row){
       assert.deepEqual(row, expected[cnt++]);
@@ -89,7 +89,7 @@ describe('merge', function(){
 
     var cnt = 0;
 
-    var m = new Mls(makeStreams([data1, data2, data3, data4]));
+    var m = new Mos(makeStreams([data1, data2, data3, data4]));
 
     m.on('data', function(row){
       assert.deepEqual(row, expected[cnt++]);

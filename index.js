@@ -6,7 +6,7 @@ var fs = require('fs')
 /**
  * Merge ldjson streams
  */
-function MergeLdjsonStreams(sources, options) {
+function MergeObjectStreams(sources, options) {
   options = options || {};
   options.objectMode = true;
   Readable.call(this, options);
@@ -56,9 +56,9 @@ function MergeLdjsonStreams(sources, options) {
 
 };
 
-util.inherits(MergeLdjsonStreams, Readable);
+util.inherits(MergeObjectStreams, Readable);
 
-MergeLdjsonStreams.prototype._read = function() {
+MergeObjectStreams.prototype._read = function() {
   if(this._sync){    
     this._sources.forEach(function(s){    
       s.resume();
@@ -66,7 +66,7 @@ MergeLdjsonStreams.prototype._read = function() {
   }
 };
 
-MergeLdjsonStreams.prototype.pushMerge = function(){
+MergeObjectStreams.prototype.pushMerge = function(){
   this._cnt = 0;
 
   var merged = {};
@@ -80,4 +80,4 @@ MergeLdjsonStreams.prototype.pushMerge = function(){
   this.push(merged); 
 };
 
-module.exports = MergeLdjsonStreams;
+module.exports = MergeObjectStreams;

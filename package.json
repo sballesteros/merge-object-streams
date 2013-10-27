@@ -1,14 +1,14 @@
 {
-  "name": "merge-ldjson-streams",
+  "name": "merge-object-streams",
   "version": "0.0.0",
-  "description": "Merge line delimited JSON readable streams (for instance coming from CSV data) operating in object mode.",
+  "description": "Merge line by line streams operating in object mode.",
   "main": "index.js",
   "scripts": {
     "test": "make test"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/plom-io/merge-ldjson-streams.git"
+    "url": "git://github.com/plom-io/merge-object-streams.git"
   },
   "keywords": [
     "ldjson",
@@ -18,13 +18,12 @@
     "streams",
     "line",
     "delimited",
-    "json",
-    "CSV"
+    "json"
   ],
   "author": "Sebastien Ballesteros",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/plom-io/merge-ldjson-streams/issues"
+    "url": "https://github.com/plom-io/merge-object-streams/issues"
   },
   "devDependencies": {
     "mocha": "~1.13.0"
