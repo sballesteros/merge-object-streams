@@ -79,3 +79,5 @@ MergeLdjsonStreams.prototype.pushMerge = function(){
   this._sync = true;
   this.push(merged); 
 };
+
+module.exports = MergeLdjsonStreams;
