@@ -43,11 +43,11 @@ function MergeObjectStreams(sources, options) {
       that._nFlowing--;
       that._tmps[s.mergedId] = {};
 
-      if(that._nFlowing = that._cnt){
-        that.pushMerge();
+      if(that._nFlowing && that._nFlowing === that._cnt){
+       that.pushMerge();     
       }
 
-      if(that._cntEnd == that._sources.length){
+      if(that._cntEnd === that._sources.length){
         that.push(null);
       }
     });

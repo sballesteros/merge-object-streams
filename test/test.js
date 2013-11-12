@@ -43,8 +43,7 @@ describe('merge', function(){
   var data3 = [
     {f: 77, g: 78},
     {f: 79, g: 80},
-    {f: 81, g: 82},
-
+    {f: 81, g: 82}
   ];
 
   var data4 = [
