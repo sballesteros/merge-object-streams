@@ -1,17 +1,35 @@
 var Mos = require('..')
   , Readable = require('stream').Readable
+  , PassThrough = require('stream').PassThrough
+  , util = require("util")
   , assert = require('assert');
+
+function StreamObj(objList, options){
+  options = options || {};
+  options.objectMode = true;
+
+  Readable.call(this, options);
+  this._objList = objList;
+  this._i = 0;
+  this._iEnd = objList.length;
+};
+
+util.inherits(StreamObj, Readable);
+
+StreamObj.prototype._read = function (size){
+  this.push(this._objList[this._i++]);
+  if(this._i === this._iEnd){
+    this.push(null);
+  }
+};
+
 
 
 function makeStreams(datalist){
   var streams = [];
 
   datalist.forEach(function(data){
-    var s = new Readable({objectMode:true});
-    data.forEach(function(x){
-      s.push(x);
-    })
-    s.push(null);
+    var s = new StreamObj(data);    
     streams.push(s);
   });
 
@@ -74,7 +92,7 @@ describe('merge', function(){
     m.on('end', done);
   });
 
-  it('should merge streams of the different length', function(done){
+  it('should merge streams of different length', function(done){
 
     var expected = [
       { a: 1, b: 2, c: 3, d: 1, e: 2, f: 77, g: 78, h: 1000 },
@@ -96,5 +114,4 @@ describe('merge', function(){
 
     m.on('end', done);
   });
-
 });

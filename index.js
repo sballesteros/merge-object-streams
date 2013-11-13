@@ -18,6 +18,7 @@ function MergeObjectStreams(sources, options) {
   this._nFlowing = sources.length; //number of stream from sources still flowing (i.e not having emitted "end"). This is usefull if the streams don't have the same number of rows
   this._cntEnd = 0;
   this._sync = false;
+  this._lastId = undefined;
   this._tmps = new Array(sources.length);
 
   this._sources.forEach(function(s, i){   
@@ -28,8 +29,9 @@ function MergeObjectStreams(sources, options) {
       that._cnt++;
       that._sync = false;
       that._tmps[s.mergedId] = obj;
+      that._lastId = s.mergedId;
 
-      if(that._cnt == that._nFlowing){
+      if(that._cnt >= that._nFlowing){
         that.pushMerge();
       }
     });
@@ -39,15 +41,17 @@ function MergeObjectStreams(sources, options) {
     });
 
     s.on('end', function(){
-      that._cntEnd++;
       that._nFlowing--;
-      that._tmps[s.mergedId] = {};
+      that._cntEnd++;
 
-      if(that._nFlowing && that._nFlowing === that._cnt){
-       that.pushMerge();     
+      if( (that._cnt > 1 || that._lastId != s.mergedId)  && (that._cnt == that._nFlowing) ){
+        that.pushMerge();
       }
 
       if(that._cntEnd === that._sources.length){
+        if(that._cnt){
+          that.pushMerge();
+        }
         that.push(null);
       }
     });
@@ -70,11 +74,12 @@ MergeObjectStreams.prototype.pushMerge = function(){
   this._cnt = 0;
 
   var merged = {};
-  this._tmps.forEach(function(ob){
+  this._tmps.forEach(function(ob, i){
     for(var key in ob){
       merged[key] = ob[key];
     }
-  });
+    this._tmps[i] = {};
+  }, this);
 
   this._sync = true;
   this.push(merged); 
