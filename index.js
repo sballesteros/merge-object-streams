@@ -4,7 +4,7 @@ var fs = require('fs')
   , util = require('util');
 
 /**
- * Merge ldjson streams
+ * Merge streams in objectMode
  */
 function MergeObjectStreams(sources, options) {
   options = options || {};
@@ -18,18 +18,19 @@ function MergeObjectStreams(sources, options) {
   this._nFlowing = sources.length; //number of stream from sources still flowing (i.e not having emitted "end"). This is usefull if the streams don't have the same number of rows
   this._cntEnd = 0;
   this._sync = false;
-  this._lastId = undefined;
+  this._flowedIds = [];
   this._tmps = new Array(sources.length);
 
   this._sources.forEach(function(s, i){   
     s.mergedId = i;
 
     s.on('data', function(obj){
+
       s.pause();
       that._cnt++;
       that._sync = false;
       that._tmps[s.mergedId] = obj;
-      that._lastId = s.mergedId;
+      that._flowedIds.push(s.mergedId);
 
       if(that._cnt >= that._nFlowing){
         that.pushMerge();
@@ -44,7 +45,7 @@ function MergeObjectStreams(sources, options) {
       that._nFlowing--;
       that._cntEnd++;
 
-      if( (that._cnt > 1 || that._lastId != s.mergedId)  && (that._cnt == that._nFlowing) ){
+      if( that._cnt && (that._flowedIds.indexOf(s.mergedId) === -1) && (that._cnt == that._nFlowing) ){
         that.pushMerge();
       }
 
@@ -82,7 +83,9 @@ MergeObjectStreams.prototype.pushMerge = function(){
   }, this);
 
   this._sync = true;
-  this.push(merged); 
+  this._flowedIds = [];
+  this.push(merged);  
+
 };
 
 module.exports = MergeObjectStreams;

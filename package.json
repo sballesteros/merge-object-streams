@@ -1,6 +1,6 @@
 {
   "name": "merge-object-streams",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Merge line by line streams operating in object mode.",
   "main": "index.js",
   "scripts": {
